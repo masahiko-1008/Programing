@@ -26,7 +26,7 @@ void Barrier::Draw(const Vector2D& location)
 }
 
 //õ–½‚ªs‚«‚½‚©H
-bool Barrier::IsFinshed(float speed)
+bool Barrier::IsFinished(float speed)
 {
 	life_span -= speed;
 	return(life_span <= 0);

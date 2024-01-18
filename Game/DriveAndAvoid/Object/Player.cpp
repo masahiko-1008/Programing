@@ -156,9 +156,9 @@ float Player::GetHp() const
 }
 
 //バリアの枚数取得処理
-int Player::GetBarriarConst() const
+int Player::GetBarriarCount() const
 {
-	return this->barrier_const;
+	return this->barrier_count;
 }
 
 //バリア有効か？を取得
@@ -170,11 +170,11 @@ bool Player::IsBarrier() const
 //移動処理
 void Player::Movement()
 {
-	vectr2D move = Vector2D(0.0f);
+	Vector2D move = Vector2D(0.0f);
 	angle = 0.0f;
 
 	//十字移動処理
-	if (InputControl::GetButt(XINPUT_BUTTON_DPAD_LEFT))
+	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_LEFT))
 	{
 		move += Vector2D(-1.0f, 0.0f);
 		angle = -DX_PI_F / 18;
@@ -197,7 +197,7 @@ void Player::Movement()
 
 	//画面外に行かないように制限する
 	if ((location.x < box_size.x) || (location.x >= 640.0f - 180.0f) ||
-		(location.y_ < box_size.y) || (location.y >= 480.0f - box_size.y))
+		(location.y < box_size.y) || (location.y >= 480.0f - box_size.y))
 	{
 		location -= move;
 	}

@@ -28,6 +28,16 @@ public:
 
 public:
 	void SetActive(bool flg);      //有効フラグ設定
-	void DereaseHp(float value);   //体力減少処理
-	Vector2D Get 
+	void DecreaseHp(float value);   //体力減少処理
+	Vector2D GetLocation() const;  //位置座標取得
+	Vector2D GetBoxSize() const;   //当たり判定の大きさを取得
+	float GetSpeed() const;        //速さ取得処理
+	float GetFuel() const;         //燃料取得
+	float GetHp() const;           //体力取得
+	int GetBarriarCount() const;   //バリアの枚数取得
+	bool IsBarrier() const;        //バリア有効か？を取得
+
+private:
+	void Movement();               //移動処理
+	void Acceleration();           //加速処理
 };
