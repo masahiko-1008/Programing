@@ -13,7 +13,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	try
 	{
 		//シーンマネージャー機能の生成
-		SceneManager Manager;
+		SceneManager manager;
 
 		//シーンマネージャー機能の初期化処理
 		manager.Initialize();

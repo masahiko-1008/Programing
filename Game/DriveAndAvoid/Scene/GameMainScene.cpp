@@ -3,7 +3,7 @@
 #include "DxLib.h"
 #include <math.h>
 
-GameMainScene::GameMainScene() :high_score(0), back_ground(NULL),
+GameMainScene::GameMainScene() : high_score(0), back_ground(NULL),
 barrier_image(NULL), mileage(0), player(nullptr), enemy(nullptr)
 {
 	for (int i = 0; i < 3; i++)
@@ -189,30 +189,85 @@ void GemeMainScene::Finalize()
 	{
 		score += (i + 1) * 50 * enemy_count[i];
 	}
-}
 
-//リザルトデータの書き込む
-FILE* fp = nullptr;
-//ファイルオープン
-errno_t result = fopen_s(&fp, "Resource/dat/result_data.csv", "w");
+	//リザルトデータの書き込む
+	FILE* fp = nullptr;
+	//ファイルオープン
+	errno_t result = fopen_s(&fp, "Resource/dat/result_data.csv", "w");
 
-//エラーチェック
-if (result != 0)
-{
+	//エラーチェック
+	if (result != 0)
+	{
 	throw("Resource/dat/result_data.csvが開けません`n");
-}
+	}
 
-//スコアを保存
-fprintf(fp, "%d,`n", score);
+	//スコアを保存
+	fprintf(fp, "%d,`n", score);
 
-//避けた数と得点を保存
-for (int i = 0; i < 3; i++)
-{
+	//避けた数と得点を保存
+	for (int i = 0; i < 3; i++)
+	{
 	fprintf(fp, "%d,`n", enemy_count[i]);
+	}
+
+	//ファイルクローズ
+	fclose(fp);
+
+	//動的確保したオブジェクトを削除する
+	player->Finalize();
+	delete player;
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (enemy[i] != nullptr)
+		{
+			enemy[i]->Finalize();
+			delete enemy[i];
+			enemy[i] = nullptr;
+		}
+	}
+	delete[] enemy;
 }
 
-//ファイルクローズ
-fclose(fp);
+//現在のシーン情報を取得
+eSceneType GameMainScene::GetNowScene() const
+{
+	return eSceneType::E_MAIN;
+}
 
-//動的確保したオブジェクトを削除する
-player->Finalize();
+//ハイスコアの読み込み
+void GemeMainScene::ReadHighScore()
+{
+	RankingData data;
+	data.Initialize();
+	
+	high_score = data.GetScore(0);
+
+	data.Finalize();
+}
+
+//当たり判定処理(プレイヤーと敵)
+bool GemeMainScene::IsHitCheck(Player* p, Enemy* e)
+{
+	//プレイヤーがバリアを貼っていたら、当たり判定を無視する
+	if (p->IsBarrier())
+	{
+		return false;
+	}
+
+	//敵情報が無ければ、当たり判定を無視する
+	if (e == nullptr)
+	{
+		return false;
+	}
+
+	//位置情報の差分を取得
+	Vector2D diff_location = p->GetLocation() - e->GetLocation();
+
+	//当たり判定サイズの大きさを取得
+	Vector2D box_ex = p->GetBoxSize() + e->GetBoxSize();
+
+	//コリジョンデータより位置情報の差分が小さいなら、ヒット判定とする
+	return((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) <
+box_ex.y));
+}
