@@ -13,7 +13,7 @@ HelpScene::~HelpScene()
 }
 
 //初期化処理
-void HelpScene::Initilize()
+void HelpScene::Initialize()
 {
 	//画像の読み込み
 	background_image = LoadGraph("Resource/images/Title.bmp");
@@ -21,7 +21,7 @@ void HelpScene::Initilize()
 	//エラーチェック
 	if (background_image == -1)
 	{
-		throw("Resource/image/Title.bmpがありません`n");
+		throw("Resource/image/Title.bmpがありません\n");
 	}
 }
 

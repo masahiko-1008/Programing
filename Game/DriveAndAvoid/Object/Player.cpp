@@ -21,7 +21,7 @@ void Player::Initialize()
 	box_size = Vector2D(31.0f, 60.0f);
 	angle = 0.0f;
 	speed = 3.0f;
-	hp = 1000;
+	hp = 10;
 	fuel = 20000;
 	barrier_count = 3;
 
@@ -31,7 +31,7 @@ void Player::Initialize()
 	//エラーチェック
 	if (image == -1)
 	{
-		throw("Resource/images/car1pol.bmpがありません`n");
+		throw("Resource/images/car1pol.bmpがありません\n");
 	}
 }
 
@@ -181,7 +181,7 @@ void Player::Movement()
 	}
 	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_RIGHT))
 	{
-		move += Vector2D(-1.0f, 0.0f);
+		move += Vector2D(1.0f, 0.0f);
 		angle = DX_PI_F / 18;
 	}
 	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_UP))

@@ -18,21 +18,21 @@ ResultScene::~ResultScene()
 }
 
 //初期化処理
-void ResultScene::Initialze()
+void ResultScene::Initialize()
 {
 	//画像の読み込み
-	back_ground = LoadGraph("Resource/image/back.bmp");
+	back_ground = LoadGraph("Resource/images/back.bmp");
 	int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120,
 enemy_image);
 	
 	//エラーチェック
 	if (back_ground == -1)
 	{
-		throw("Resource/images/back.bmpがありません`n");
+		throw("Resource/images/back.bmpがありません\n");
 	}
 	if (result == -1)
 	{
-		throw("Resource/images/car.bmpがありません`n");
+		throw("Resource/images/car.bmpがありません\n");
 	}
 
 	//ゲーム結果の読み込み
@@ -66,7 +66,7 @@ void ResultScene::Draw() const
 	SetFontSize(20);
 	DrawString(220, 170, "ゲームオーバー", GetColor(204, 0, 0));
 	SetFontSize(16);
-	DrawString(180, 200, "走行距離", GetColor(0, 0, 0));
+	DrawString(180, 200, "走行距離 ", GetColor(0, 0, 0));
 	for (int i = 0; i < 3; i++)
 	{
 		DrawRotaGraph(230, 230 + (i * 20), 0.3f, DX_PI_F / 2, enemy_image[i],
@@ -75,7 +75,7 @@ TRUE);
 			enemy_count[i], (i + 1) * 50, (i + 1) * 50 * enemy_count[i]);
 	}
 	DrawString(180, 290, "スコア", GetColor(0, 0, 0));
-	DrawFormatString(180, 290, 0xFFFFFF, " =%6d", score);
+	DrawFormatString(180, 290, 0xFFFFFF, "      =%6d", score);
 }
 
 //終了時処理
@@ -98,6 +98,26 @@ eSceneType ResultScene::GetNowScene() const
 //リザルトデータの読み込み
 void ResultScene::ReadResultData()
 {
+	//ファイルオープン
+	FILE* fp = nullptr;
+	errno_t result= fopen_s(&fp, "Resource/dat/result_data.csv", "r");
+
+	//エラーチェック
+	if (result != 0)
+	{
+		throw("Resource/dat/result_data.csvが読み込めません\n");
+	}
+
+	//結果を読み込む
+	fscanf_s(fp, "%6d,\n", &score);
+
+	//避けた数と得点を取得
+	for (int i = 0; i < 3; i++)
+	{
+		fscanf_s(fp, "%6d,\n", &enemy_count[i]);
+	}
+	//ファイルクローズ
+	fclose(fp);
 }
 
 

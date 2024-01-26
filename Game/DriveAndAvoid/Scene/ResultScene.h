@@ -14,7 +14,7 @@ public:
 	ResultScene();
 	virtual ~ResultScene();
 
-	virtual void Initialze() override;
+	virtual void Initialize() override;
 	virtual eSceneType Update() override;
 	virtual void Draw() const override;
 	virtual void Finalize() override;

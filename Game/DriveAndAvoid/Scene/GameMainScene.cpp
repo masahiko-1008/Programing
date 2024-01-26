@@ -19,7 +19,7 @@ GameMainScene::~GameMainScene()
 }
 
 //初期化処理
-void GameMainScone::Initialize()
+void GameMainScene::Initialize()
 {
 	//高得点値を読み込む
 	ReadHighScore();
@@ -33,15 +33,15 @@ enemy_image);
 	//エラーチェック
 	if (back_ground == -1)
 	{
-		throw("Resource/images/back.bmpがありません`n");
+		throw("Resource/images/back.bmpがありません\n");
 	}
 	if (result == -1)
 	{
-		throw("Resource/images/car.bmpがありません`n");
+		throw("Resource/images/car.bmpがありません\n");
 	}
 	if (barrier_image == -1)
 	{
-		throw("Resource/images/barrier.pngがありません`n");
+		throw("Resource/images/barrier.pngがありません\n");
 	}
 
 	//オブジェクトの生成
@@ -75,7 +75,7 @@ eSceneType GameMainScene::Update()
 			if (enemy[i] == nullptr)
 			{
 				int type = GetRand(3) % 3;
-				enemy[i] = new Enemy(type, enemy_imge[type]);
+				enemy[i] = new Enemy(type, enemy_image[type]);
 				enemy[i]->Initialize();
 				break;
 			}
@@ -87,13 +87,13 @@ eSceneType GameMainScene::Update()
 	{
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update(player->Getspeed());
+			enemy[i]->Update(player->GetSpeed());
 
 			//画面外に行ったら、敵を削除してスコア加算
 			if (enemy[i]->GetLocation().y >= 640.0f)
 			{
 				enemy_count[enemy[i]->GetType()]++;
-				enemy[i]->Finakize();
+				enemy[i]->Finalize();
 				delete enemy[i];
 				enemy[i] = nullptr;
 			}
@@ -118,8 +118,9 @@ eSceneType GameMainScene::Update()
 	return GetNowScene();
 }
 
+
 //描画処理
-void GemeMainScene::Draw() const
+void GameMainScene::Draw() const
 {
 	//背景画像の描画
 	DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
@@ -147,7 +148,7 @@ void GemeMainScene::Draw() const
 	{
 		DrawRotaGraph(523 + (i * 50), 120, 0.3, 0, enemy_image[i], TRUE, 
 	FALSE);
-		DrawRotaGraph(510 + (i * 50), 140,GetColor(255,255,255),"%03d",
+		DrawFormatString(510 + (i * 50), 140,GetColor(255,255,255),"%03d",
 	enemy_count[i]);
 	}
 	DrawFormatString(510, 200, GetColor(0, 0, 0), "走行距離");
@@ -181,7 +182,7 @@ FALSE);
 }
 
 //終了時処理
-void GemeMainScene::Finalize()
+void GameMainScene::Finalize()
 {
 	//スコアを加算する
 	int score = (mileage / 10 * 10);
@@ -198,16 +199,16 @@ void GemeMainScene::Finalize()
 	//エラーチェック
 	if (result != 0)
 	{
-	throw("Resource/dat/result_data.csvが開けません`n");
+	throw("Resource/dat/result_data.csvが開けません\n");
 	}
 
 	//スコアを保存
-	fprintf(fp, "%d,`n", score);
+	fprintf(fp, "%d,\n", score);
 
 	//避けた数と得点を保存
 	for (int i = 0; i < 3; i++)
 	{
-	fprintf(fp, "%d,`n", enemy_count[i]);
+	fprintf(fp, "%d,\n", enemy_count[i]);
 	}
 
 	//ファイルクローズ
@@ -236,7 +237,7 @@ eSceneType GameMainScene::GetNowScene() const
 }
 
 //ハイスコアの読み込み
-void GemeMainScene::ReadHighScore()
+void GameMainScene::ReadHighScore()
 {
 	RankingData data;
 	data.Initialize();
@@ -247,7 +248,7 @@ void GemeMainScene::ReadHighScore()
 }
 
 //当たり判定処理(プレイヤーと敵)
-bool GemeMainScene::IsHitCheck(Player* p, Enemy* e)
+bool GameMainScene::IsHitCheck(Player* p, Enemy* e)
 {
 	//プレイヤーがバリアを貼っていたら、当たり判定を無視する
 	if (p->IsBarrier())
