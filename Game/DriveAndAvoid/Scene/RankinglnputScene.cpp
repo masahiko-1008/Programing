@@ -107,7 +107,7 @@ GetColor(255, 255, 255), FALSE);
 		}
 		else
 		{
-			DrawBox(0, 0, font_size, font_size, GetColor(255, 255, 255),
+			DrawBox(38, 400, font_size*2, font_size, GetColor(255, 255, 255),
 FALSE);
 		}
 	}
